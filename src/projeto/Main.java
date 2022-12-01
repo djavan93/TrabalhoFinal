@@ -4,11 +4,12 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
 	public static void main(String[] args) throws IOException {
-		ArrayList<Integer> entradas = new ArrayList<>();
-		entradas = leitor("D:/USUARIO/Área de Trabalho/edb/TrabalhoFinal/src/input/Entradas.txt");
+		List<Integer> entradas = new ArrayList<>();
+		entradas = leitor("/home/djavan.costa.088/Documentos/Entradas.txt");
 		
 	}
 	

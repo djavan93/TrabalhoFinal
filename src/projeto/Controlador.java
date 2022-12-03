@@ -1,7 +1,5 @@
 package projeto;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Queue;
 
 public class Controlador {
@@ -10,6 +8,7 @@ public class Controlador {
 	private ConjuntoDisjunto melhor_Conjunto_Disjunto;
 	
 	public Controlador(Queue entradas) {
+		//o metodo poll() puxa os primeiros elementos da fila, ou seja, o numero de nós e o o maximo de ligações "d"
 		num_Nodes = (int)entradas.poll();
 		max_Ligacoes = (int)entradas.poll();
 		

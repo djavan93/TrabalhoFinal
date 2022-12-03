@@ -1,5 +1,7 @@
 package projeto;
 
+
+//O nó aponta para a aresta e a aresta aponta para o nó
 public class Nodo {
 	private int chave;
 	private Aresta pai;

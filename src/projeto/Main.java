@@ -10,7 +10,10 @@ import java.util.Queue;
 
 public class Main {
 	public static void main(String[] args) throws IOException {
+		//Usamos uma fila aqui
 		Queue entradas = new ArrayDeque ();
+		
+		//lê as entradas e envia para Controlador
 		entradas = leitor("/home/djavan.costa.088/Documentos/Entradas.txt");
 		Controlador controlador = new Controlador(entradas);
 	}

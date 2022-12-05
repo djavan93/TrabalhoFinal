@@ -2,33 +2,26 @@ package projeto;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Queue;
 
 public class ConjuntoDisjunto {
 	private List<Nodo> nodos;
 	private int max_Ligacoes;
 	private int custo_Total;
 	
-	public ConjuntoDisjunto(String combinacao, int num_Nodes, List<Integer> entradas) {
+	public ConjuntoDisjunto(int num_Nodes) {
 		nodos = new ArrayList<Nodo>();
 		max_Ligacoes = 0;
 		custo_Total = 0;
 		
-		int custo;
-		int contador = 1;
+
 		//Inicia os nós
 		for(int i = 0; i < num_Nodes; i++) {
 			nodos.add(gerar(i));
 		}
 		
 		//aqui trata os binarios recebidos e gera o Conjunto Disjunto
-		for(int i = 0; i < num_Nodes - 1; i++) {
-			for(int j = i + 1; j < num_Nodes; j++) {
-				if(combinacao.charAt(contador) == '1') {
-					fundir(nodos.get(i), nodos.get(j), entradas.get(contador - 1));
-				}
-				contador++;
-			}
+		for(int i = 0; i < Combinacoes.num_ligacoes(); i++) {
+			fundir(nodos.get(Combinacoes.getLigacao(i).getNodo1()), nodos.get(Combinacoes.getLigacao(i).getNodo2()), Combinacoes.getLigacao(i).getCusto());	
 		}
 		for(var x : nodos) {
 			if(x.get_Pai() != null) {

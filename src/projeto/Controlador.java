@@ -5,100 +5,91 @@ import java.util.List;
 import java.util.Queue;
 
 public class Controlador {
-	private int num_Nodes;
-	private int max_Ligacoes;
-	private ConjuntoDisjunto melhor_Conjunto_Disjunto;
-	private int num_Combinacoes_possiveis;
+	private int numNodes;
+	private int maxLigacoes;
+	private ConjuntoDisjunto melhorConjuntoDisjunto;
+	private int numCombinacoesPossiveis;
+	private List<Ligacao> ligacoes;
+	private ConjuntoDisjunto conjuntoDisjunto;
 	
 	
-	
-	public Controlador(List<Integer> entradas) {
-		num_Combinacoes_possiveis = 0;
-		ConjuntoDisjunto conjDis;
+	public Controlador(Queue<Integer> entradas) {
+		new Combinacoes();
+		numCombinacoesPossiveis = 0;
+		ligacoes = new ArrayList<Ligacao>();
+		
 		
 		//o metodo poll() puxa os primeiros elementos da fila, ou seja, o numero de nós e o o maximo de ligações "d"
-		num_Nodes = (int)entradas.remove(0);
-		max_Ligacoes = (int)entradas.remove(0);
+		numNodes = (int)entradas.poll();
+		maxLigacoes = (int)entradas.poll();
 		
-		//Aqui gera todos as combinações de binários e envia para ConjuntoDisjunto, 
-		//se for um conjunto válido e melhor q o anterior, adiciona em melhor_Conjunto_Disjunto
-		
-		long binario = (long) Math.pow(2, num_Arestas());
-		for(long i = 0; i < (long) Math.pow(2, num_Arestas()) - 1; i++) {
-			binario++;
-			String str_bin = Long.toBinaryString(binario);
-			if(validar_Combinacao(str_bin)) {
-				num_Combinacoes_possiveis++;
-				conjDis = new ConjuntoDisjunto(str_bin, num_Nodes, entradas);
-				if(melhor_Conjunto_Disjunto == null) {
-					melhor_Conjunto_Disjunto = conjDis;
-				}
-				else {
-					if(conjDis.get_Max_Ligacoes() <= max_Ligacoes) {
-						if(conjDis.get_Custo_Total() < melhor_Conjunto_Disjunto.get_Custo_Total()) {
-							if(conjDis.validar_Conjunto()) {
-								melhor_Conjunto_Disjunto = conjDis;
-								//System.out.println(binario + " - " + Long.toBinaryString(binario));
-							}
-							
-						}
-					}
-				}
+		//Cria "modelos" de arestas, contendo o nó de origem, custo e nó destino,
+		//Que serão modificadas mais a frente.
+		//Elas serão combinadas e enviadas para o conjunto disjunto
+		for(int i = 0; i < numNodes - 1; i++) {
+			for(int j = i + 1; j < numNodes; j++) {
+				ligacoes.add(new Ligacao(i, entradas.poll(), j));
 			}
+			Combinacoes.setLigacao(new Ligacao(-1, -1, -1));
 		}
-		melhor_Conjunto_Disjunto.imprimir();
+		
+		//Aqui gera todos as combinações com num e envia para ConjuntoDisjunto, 
+		//se for um conjunto válido e melhor q o anterior, adiciona em melhor_Conjunto_Disjunto
+		gerarCombinacoes(0, 0);
+		
+		
+		melhorConjuntoDisjunto.imprimir();
+		System.out.println("Combinações possíveis = " + numCombinacoesPossiveis + "\nNumero de arestas = " + numArestas());
 	}
-	
 	
 	//Somatório de 1 até num_Nodes - 1, representa a quantidade
 	//de conexões possíveis
-	private int num_Arestas() {
+	private int numArestas() {
 		int x = 0;
-		for(int i = 1; i <= num_Nodes - 1; i++) {
+		for(int i = 1; i <= numNodes - 1; i++) {
 			x = x + i;
 		}
 		return x;
 	}
 	
+	
 	//Verifica se aparecem num_Nodes - 1 ligações, pois é o numero necessario para 
 	//todos os nós serem conectados
-	private boolean validar_Combinacao(String str_Bin) {
-		long quantidadeDeUns = 0;
-		for(long i = 1; i < str_Bin.length(); i++) {
-			if(str_Bin.charAt((int)i) == '1') {
-				quantidadeDeUns++;
+	
+	public void gerarCombinacoes(int id, int inicio) {
+		if(id == numNodes - 1) {
+			int vetor[] = new int[numNodes];
+			for(int i = 0; i < numNodes - 1; i++) {
+				vetor[Combinacoes.getLigacao(i).getNodo1()]++;
+				vetor[Combinacoes.getLigacao(i).getNodo2()]++;
 			}
-		}
-		
-		
-		
-		if(quantidadeDeUns == num_Nodes - 1) {
-			//return true;
-			return verifica_Nodos_Presentes(str_Bin);
+			for(int i = 0; i < numNodes; i++ ) {
+				if(vetor[i] == 0) {
+					return;
+				}
+			}
+			conjuntoDisjunto = new ConjuntoDisjunto(numNodes);
+			if(conjuntoDisjunto.get_Max_Ligacoes() <= maxLigacoes) {
+				if(melhorConjuntoDisjunto == null) {
+					melhorConjuntoDisjunto = conjuntoDisjunto;
+				}
+				else {
+					if(conjuntoDisjunto.get_Custo_Total() < melhorConjuntoDisjunto.get_Custo_Total()) {
+						if(conjuntoDisjunto.validar_Conjunto()) {
+							melhorConjuntoDisjunto = conjuntoDisjunto;
+						}	
+					}
+				}
+				numCombinacoesPossiveis++;
+			}
+			return;
 		}
 		else {
-			return false;
+			for(int i = inicio; i < ligacoes.size() - (numNodes - 2 - id); i++) {
+				Combinacoes.mudarLigacao(id, ligacoes.get(i));
+				gerarCombinacoes(id + 1, i + 1);
+			}
 		}
 	}
 	
-	private boolean verifica_Nodos_Presentes(String str_Bin) {
-		long contador = 1;
-		int vetor[] = new int[num_Nodes + 1];
-		for(int i = 1; i <= num_Nodes; i++) {
-			for(int j = i + 1; j <= num_Nodes; j++) {
-				//System.out.println(contador);
-				if(str_Bin.charAt((int)contador) == '1') {
-					vetor[i]++;
-					vetor[j]++;
-				}
-				contador++;
-			}
-		}
-		for(int i = 1; i <= num_Nodes; i++ ) {
-			if(vetor[i] == 0) {
-				return false;
-			}
-		}
-		return true;
-	}
 }

@@ -4,24 +4,21 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Queue;
 
 public class Main {
 	public static void main(String[] args) throws IOException {
 		//Usamos uma fila aqui
-		List<Integer> entradas = new ArrayList<Integer> ();
+		Queue<Integer> entradas = new ArrayDeque<Integer> ();
 		
 		//lê as entradas e envia para Controlador
 		entradas = leitor("D:/USUARIO/Área de Trabalho/edb/TrabalhoFinal/src/input/Entradas.txt");
-		Controlador controlador = new Controlador(entradas);
+		new Controlador(entradas);
 	}
 	
-	
 	//Ler entradas
-	public static List<Integer> leitor(String path) throws IOException {
-		List<Integer> entradas = new ArrayList<Integer>();
+	public static Queue<Integer> leitor(String path) throws IOException {
+		Queue<Integer> entradas = new ArrayDeque<Integer>();
 		try {
 		BufferedReader buffRead = new BufferedReader(new FileReader(path));
 		String[] arrayValores;

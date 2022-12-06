@@ -129,7 +129,7 @@ public class ConjuntoDisjunto {
 		return custoTotal;
 	}
 	
-	public void imprimir() {
+	public String toString() {
 		String retorno = "";
 		for(int i = 0; i < nodos.size(); i++) {
 			if(nodos.get(i).getPai() != null) {
@@ -139,7 +139,7 @@ public class ConjuntoDisjunto {
 		retorno = retorno + "Custo Total = " + custoTotal + "\n";
 		retorno = retorno + "Máximo de ligações = " + maxLigacoes;
 		retorno = "[Origem - Destino] = Custo\n" + retorno;
-		System.out.println(retorno);
+		return retorno;
 	}
 	
 	//Atualiza o maxLigacoes e o custoTotal do conjunto disjunto

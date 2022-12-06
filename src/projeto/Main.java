@@ -7,19 +7,25 @@ import java.util.ArrayDeque;
 import java.util.Queue;
 
 public class Main {
+	private static String caminho;
 	public static void main(String[] args) throws IOException {
+		caminho = "D:/USUARIO/Documentos/";
 		//Usamos uma fila aqui
 		Queue<Integer> entradas = new ArrayDeque<Integer> ();
 		
 		//lê as entradas e envia para Controlador
-		entradas = leitor("D:/USUARIO/Documentos/Entradas.txt");
-		new Controlador(entradas);
+		try {
+			entradas = leitor(caminho + "Entradas.txt");
+			new Controlador(entradas);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
 	}
 	
 	//Ler entradas
 	public static Queue<Integer> leitor(String path) throws IOException {
 		Queue<Integer> entradas = new ArrayDeque<Integer>();
-		try {
 		BufferedReader buffRead = new BufferedReader(new FileReader(path));
 		String[] arrayValores;
 		String linha = buffRead.readLine();
@@ -35,10 +41,10 @@ public class Main {
 			linha = buffRead.readLine();
 		}
 		buffRead.close();
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-		}
 		return entradas;
+	}
+	
+	public static String getCaminho() {
+		return caminho;
 	}
 }

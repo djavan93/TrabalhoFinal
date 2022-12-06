@@ -1,5 +1,9 @@
 package projeto;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
@@ -38,8 +42,9 @@ public class Controlador {
 		gerarCombinacoes(0, 0);
 		
 		
-		melhorConjuntoDisjunto.imprimir();
+		System.out.println(melhorConjuntoDisjunto.toString()); 
 		System.out.println("Combinações possíveis = " + numCombinacoesPossiveis + "\nNumero de arestas = " + numArestas());
+		escreverArquivo(melhorConjuntoDisjunto.toString());
 	}
 	
 	//Somatório de 1 até num_Nodes - 1, representa a quantidade
@@ -92,4 +97,19 @@ public class Controlador {
 		}
 	}
 	
+	private void escreverArquivo(String retorno) {
+		File arquivo = new File(Main.getCaminho() + "Saida.txt");
+		try {
+			FileWriter fw = new FileWriter( arquivo );
+			BufferedWriter bw = new BufferedWriter( fw );
+			bw.write( retorno );
+			bw.newLine();
+			bw.write("Combinações possíveis = " + numCombinacoesPossiveis + "\nNumero de arestas = " + numArestas());
+			bw.close();
+			fw.close();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}	
+	}	
 }

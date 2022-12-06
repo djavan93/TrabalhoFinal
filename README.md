@@ -23,6 +23,6 @@ Thayrone Kaio Alves Roberto
 
 5 - Editar, na linha 12 caminho = "C:/{seu usuario}/Documentos/";. Onde tem {seu usuario}, alterar para o usuário do seu sistema windows;
 
-5.1 - No caso do sistema ser Linux, mudar a linha 12 caminho = "/home/{seu usuario}/Documentos/Entradas.txt"; Onde usuario é o usuário do sistema linux 
+5.1 - No caso do sistema ser Linux, mudar a linha 12 caminho = "/home/{seu usuario}/Documentos/"; Onde usuario é o usuário do sistema linux 
  ```
 Após isso, o programa pode ser executado e deve funcionar corretamente.

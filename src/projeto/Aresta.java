@@ -9,11 +9,11 @@ public class Aresta {
 		this.destino = destino;
 	}
 	
-	public int get_Custo() {
+	public int getCusto() {
 		return custo;
 	}
 	
-	public Nodo get_Destino() {
+	public Nodo getDestino() {
 		return destino;
 	}
 }

@@ -5,13 +5,13 @@ import java.util.List;
 
 public class ConjuntoDisjunto {
 	private List<Nodo> nodos;
-	private int max_Ligacoes;
-	private int custo_Total;
+	private int maxLigacoes;
+	private int custoTotal;
 	
 	public ConjuntoDisjunto(int num_Nodes) {
 		nodos = new ArrayList<Nodo>();
-		max_Ligacoes = 0;
-		custo_Total = 0;
+		maxLigacoes = 0;
+		custoTotal = 0;
 		
 
 		//Inicia os nós
@@ -19,137 +19,146 @@ public class ConjuntoDisjunto {
 			nodos.add(gerar(i));
 		}
 		
-		//aqui trata os binarios recebidos e gera o Conjunto Disjunto
-		for(int i = 0; i < Combinacoes.num_ligacoes(); i++) {
+		//aqui gera o Conjunto Disjunto com a combinação recebida
+		for(int i = 0; i < Combinacoes.numLigacoes(); i++) {
 			fundir(nodos.get(Combinacoes.getLigacao(i).getNodo1()), nodos.get(Combinacoes.getLigacao(i).getNodo2()), Combinacoes.getLigacao(i).getCusto());	
 		}
+		
+		//adiciona uma ligação para todos os nós, exceto o nó raiza
 		for(var x : nodos) {
-			if(x.get_Pai() != null) {
-				x.adicionar_Num_Ligacoes(1);
+			if(x.getPai() != null) {
+				x.adicionarNumLigacoes(1);
 			}
 		}
 		
-		atualiza_Conj_Dis();
+		atualizaConjDis();
 	}
 	
-	//Operações de Conjunto Disjunto
+	//Operações de Conjunto Disjunto:
+	//Gera um novo nó
 	private Nodo gerar(int chave) {
 		return new Nodo(chave);	
 	}
 	
+	//Retorna o nó raiz
 	private Nodo buscar(Nodo nodo) {
-		if(nodo.get_Pai() == null) {
+		if(nodo.getPai() == null) {
 			return nodo;
 		}
 		else {
-			return buscar(nodo.get_Pai().get_Destino());
+			return buscar(nodo.getPai().getDestino());
 		}
 	}
 	
 	private void fundir(Nodo nodo1, Nodo nodo2, int custo) {
+		//Primeiro vefifica se eles não estão no mesmo conjunto
 		if(buscar(nodo1) != buscar(nodo2)) {
-			if(buscar(nodo1).get_Ordem() > buscar(nodo2).get_Ordem()) {
-				//System.out.println("1");
-				mudar_Destinos(nodo1, nodo2, custo);
+			//O conjunto com a ordem menor aponta para o de ordem maior
+			if(buscar(nodo1).getOrdem() > buscar(nodo2).getOrdem()) {
+				mudarDestinos(nodo1, nodo2, custo);
 			}
-			else if(buscar(nodo1).get_Ordem() < buscar(nodo2).get_Ordem()) {
-				//System.out.println("2");
-				mudar_Destinos(nodo2, nodo1, custo);
+			else if(buscar(nodo1).getOrdem() < buscar(nodo2).getOrdem()) {
+				mudarDestinos(nodo2, nodo1, custo);
 			}
 			else {
-				if(nodo1.get_Chave() < nodo2.get_Chave()) {
-					//System.out.println("3");
-					mudar_Destinos(nodo1, nodo2, custo);
+				//No caso em que eles são de mesma ordem, o nó com a chave maior
+				//aponta para o nó com chave menor
+				if(nodo1.getChave() < nodo2.getChave()) {
+					mudarDestinos(nodo1, nodo2, custo);
 				}
 				else {
-					//System.out.println("4");
-					mudar_Destinos(nodo2, nodo1, custo);
+					mudarDestinos(nodo2, nodo1, custo);
 				}
 			}
 		}
 	}
 	
 	//faz nodo2 apontar para nodo1
-	private void mudar_Destinos(Nodo nodo1, Nodo nodo2, int custo) {
-		if(nodo2.get_Pai() != null) {
-			mudar_Pais(nodo2.get_Pai().get_Destino(), nodo2);
-			if(nodo2.get_Ordem() <= nodo2.get_Pai().get_Destino().get_Ordem()) {
-				nodo2.set_Ordem(nodo2.get_Pai().get_Destino().get_Ordem() + 1);
+	private void mudarDestinos(Nodo nodo1, Nodo nodo2, int custo) {
+		//Caso o nodo2 não seja o nó raiz, ele inverte o destino da aresta
+		if(nodo2.getPai() != null) {
+			mudarPais(nodo2.getPai().getDestino(), nodo2);
+			if(nodo2.getOrdem() <= nodo2.getPai().getDestino().getOrdem()) {
+				nodo2.setOrdem(nodo2.getPai().getDestino().getOrdem() + 1);
 			}
 		}
-		nodo2.set_Pai(new Aresta(custo, nodo1));
-		nodo1.adicionar_Num_Ligacoes(1);
-		if(nodo1.get_Ordem() <= nodo2.get_Ordem()) {
-			nodo1.set_Ordem(nodo2.get_Ordem() + 1);
+		nodo2.setPai(new Aresta(custo, nodo1));
+		nodo1.adicionarNumLigacoes(1);
+		if(nodo1.getOrdem() <= nodo2.getOrdem()) {
+			nodo1.setOrdem(nodo2.getOrdem() + 1);
 		}
-		if(nodo1.get_Pai() != null) {
-			alterar_Ordens(nodo1.get_Pai().get_Destino(), nodo1.get_Ordem());
+		//Se o nodo1 não for o nó representante do conjunto, ele atualiza
+		//a ordem de seus pais
+		if(nodo1.getPai() != null) {
+			alterarOrdens(nodo1.getPai().getDestino(), nodo1.getOrdem());
 		}
 	}
 	
 	//inverte a direção das arestas no menor conjunto disjunto
-	private void mudar_Pais(Nodo nodo, Nodo nodo_Anterior) {
-		if(nodo.get_Pai() == null) {
-			nodo.set_Ordem(0);
-			nodo.adicionar_Num_Ligacoes(-1);
+	private void mudarPais(Nodo nodo, Nodo nodo_Anterior) {
+		if(nodo.getPai() == null) {
+			nodo.setOrdem(0);
+			nodo.adicionarNumLigacoes(-1);
 		}
 		else {
-			mudar_Pais(nodo.get_Pai().get_Destino(), nodo);
-			if(nodo.get_Ordem() <= nodo.get_Pai().get_Destino().get_Ordem()) {
-				nodo.set_Ordem(nodo.get_Pai().get_Destino().get_Ordem() + 1);
+			mudarPais(nodo.getPai().getDestino(), nodo);
+			if(nodo.getOrdem() <= nodo.getPai().getDestino().getOrdem()) {
+				nodo.setOrdem(nodo.getPai().getDestino().getOrdem() + 1);
 				
 			}
 		}
-		nodo.set_Pai(new Aresta(nodo_Anterior.get_Pai().get_Custo(), nodo_Anterior));
-		nodo_Anterior.adicionar_Num_Ligacoes(1);
+		nodo.setPai(new Aresta(nodo_Anterior.getPai().getCusto(), nodo_Anterior));
+		nodo_Anterior.adicionarNumLigacoes(1);
 	}
 	
-	private void alterar_Ordens(Nodo nodo, int ordem) {
-		if(nodo.get_Ordem() <= ordem) {
-			nodo.set_Ordem(ordem + 1);
+	//Altera a ordem do novo conjunto disjunto
+	private void alterarOrdens(Nodo nodo, int ordem) {
+		if(nodo.getOrdem() <= ordem) {
+			nodo.setOrdem(ordem + 1);
 		}
-		if(nodo.get_Pai() != null) {
-			alterar_Ordens(nodo.get_Pai().get_Destino(), nodo.get_Ordem());
+		if(nodo.getPai() != null) {
+			alterarOrdens(nodo.getPai().getDestino(), nodo.getOrdem());
 		}
 	}
 	
 	public int get_Max_Ligacoes() {
-		return max_Ligacoes;
+		return maxLigacoes;
 	}
 	
+	public int getCustoTotal() {
+		return custoTotal;
+	}
 	
 	public void imprimir() {
 		String retorno = "";
 		for(int i = 0; i < nodos.size(); i++) {
-			if(nodos.get(i).get_Pai() != null) {
-				retorno = "[" + nodos.get(i).get_Chave() + "-" + nodos.get(i).get_Pai().get_Destino().get_Chave() + "] = " + nodos.get(i).get_Pai().get_Custo() + "\n" + retorno;
+			if(nodos.get(i).getPai() != null) {
+				retorno = "[" + nodos.get(i).getChave() + "-" + nodos.get(i).getPai().getDestino().getChave() + "] = " + nodos.get(i).getPai().getCusto() + "\n" + retorno;
 			}
 		}
-		retorno = retorno + "Custo Total = " + custo_Total + "\n";
-		retorno = retorno + "Máximo de ligações = " + max_Ligacoes;
+		retorno = retorno + "Custo Total = " + custoTotal + "\n";
+		retorno = retorno + "Máximo de ligações = " + maxLigacoes;
 		retorno = "[Origem - Destino] = Custo\n" + retorno;
 		System.out.println(retorno);
 	}
 	
-	public void atualiza_Conj_Dis() {
+	//Atualiza o maxLigacoes e o custoTotal do conjunto disjunto
+	public void atualizaConjDis() {
 		for(int i = 0; i < nodos.size(); i++) {
-			if(nodos.get(i).get_Num_ligacoes() > max_Ligacoes) {
-				max_Ligacoes = nodos.get(i).get_Num_ligacoes();
+			if(nodos.get(i).getNumligacoes() > maxLigacoes) {
+				maxLigacoes = nodos.get(i).getNumligacoes();
 			}
-			if(nodos.get(i).get_Pai() != null) {
-				custo_Total += nodos.get(i).get_Pai().get_Custo();
+			if(nodos.get(i).getPai() != null) {
+				custoTotal += nodos.get(i).getPai().getCusto();
 			}
 		}
 	}
 	
-	public int get_Custo_Total() {
-		return custo_Total;
-	}
-	
-	public boolean validar_Conjunto() {
+	//Verifica se existe apenas um nó raiz
+	public boolean validarConjunto() {
 		int contador = 0;
 		for(int i = 0; i < nodos.size(); i++) {
-			if(nodos.get(i).get_Pai() == null) {
+			if(nodos.get(i).getPai() == null) {
 				contador++;
 			}
 		}

@@ -1,46 +1,47 @@
 package projeto;
 
 
-//O nó aponta para a aresta e a aresta aponta para o nó
+//O nó aponta para a aresta e a aresta aponta para o nó destino
 public class Nodo {
 	private int chave;
-	private int ordem;
 	private Aresta pai;
-	private int num_ligacoes;
+	private int ordem;
+	private int numLigacoes; //Quantos nós apontam para este nó
 	
 	public Nodo(int chave) {
 		this.chave = chave;
 		pai = null;
-		num_ligacoes = 0;
 		ordem = 0;
+		numLigacoes = 0;
+		
 	}
 	
-	public void set_Pai(Aresta pai) {
-		this.pai = pai;
-	}
-	
-	public Aresta get_Pai() {
-		return pai;
-	}
-	
-	public int get_Chave() {
+	public int getChave() {
 		return chave;
 	}
 	
-	public int get_Num_ligacoes() {
-		return num_ligacoes;
+	public Aresta getPai() {
+		return pai;
 	}
 	
-	public int get_Ordem() {
+	public void setPai(Aresta pai) {
+		this.pai = pai;
+	}
+	
+	public int getOrdem() {
 		return ordem;
 	}
 	
-	public void set_Ordem(int ordem) {
+	public void setOrdem(int ordem) {
 		this.ordem = ordem;
 	}
 	
-	public void adicionar_Num_Ligacoes(int x) {
-		num_ligacoes += x;
+	public int getNumligacoes() {
+		return numLigacoes;
+	}
+	
+	public void adicionarNumLigacoes(int x) {
+		numLigacoes += x;
 	}
 	
 }

@@ -10,6 +10,10 @@ public class Combinacoes {
 		ligacoes = new ArrayList<Ligacao>();
 	}
 	
+	public static Ligacao getLigacao(int i) {
+		return ligacoes.get(i);
+	}
+	
 	public static void setLigacao(Ligacao ligacao) {
 		ligacoes.add(ligacao);
 	}
@@ -18,11 +22,7 @@ public class Combinacoes {
 		ligacoes.set(i, ligacao);
 	}
 	
-	public static Ligacao getLigacao(int i) {
-		return ligacoes.get(i);
-	}
-	
-	public static int num_ligacoes() {
+	public static int numLigacoes() {
 		return ligacoes.size();
 	}
 }

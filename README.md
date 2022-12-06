@@ -21,10 +21,8 @@ Thayrone Kaio Alves Roberto
 
 4 - Abrir o arquivo Main.JAVA, que está no caminho TrabalhoFinal > src > projeto.
 
-5 - Editar, na linha 15 entradas = leitor("D:/{USUARIO}/Documentos/Entradas.txt");. Onde tem {seu usuario}, alterar para o usuário do seu sistema windows;
+5 - Editar, na linha 12 caminho = "C:/{seu usuario}/Documentos/";. Onde tem {seu usuario}, alterar para o usuário do seu sistema windows;
 
-5.1 - No caso do sistema ser Linux, mudar a linha 15 para entradas = leitor("/home/{usuario}/Documentos/Entradas.txt"); Onde usuario é o usuário do sistema linux
-
-Após isso, o programa pode ser executado e deve funcionar corretamente. 
+5.1 - No caso do sistema ser Linux, mudar a linha 12 caminho = "/home/{seu usuario}/Documentos/Entradas.txt"; Onde usuario é o usuário do sistema linux 
  ```
-Está compilado e executado.
+Após isso, o programa pode ser executado e deve funcionar corretamente.

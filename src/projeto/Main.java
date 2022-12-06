@@ -12,7 +12,7 @@ public class Main {
 		Queue<Integer> entradas = new ArrayDeque<Integer> ();
 		
 		//lê as entradas e envia para Controlador
-		entradas = leitor("D:/USUARIO/Área de Trabalho/edb/TrabalhoFinal/src/input/Entradas.txt");
+		entradas = leitor("D:/USUARIO/Documentos/Entradas.txt");
 		new Controlador(entradas);
 	}
 	

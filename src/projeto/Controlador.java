@@ -78,8 +78,8 @@ public class Controlador {
 					melhorConjuntoDisjunto = conjuntoDisjunto;
 				}
 				else {
-					if(conjuntoDisjunto.getCustoTotal() < melhorConjuntoDisjunto.getCustoTotal()) {
-						if(conjuntoDisjunto.validarConjunto()) {
+					if(conjuntoDisjunto.validarConjunto()) {
+						if(conjuntoDisjunto.getCustoTotal() < melhorConjuntoDisjunto.getCustoTotal()) {
 							melhorConjuntoDisjunto = conjuntoDisjunto;
 						}	
 					}
